@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
                     val navigationController = rememberNavController()
-                    NavHost(navController = navigationController, startDestination = "login") {
+                    NavHost(navController = navigationController, startDestination = "list") {
                         composable(route = "login") {
                             val loginViewModel: LoginViewModel by viewModels()
                             LoginScreen(

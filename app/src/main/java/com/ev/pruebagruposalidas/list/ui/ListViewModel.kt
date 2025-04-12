@@ -1,5 +1,6 @@
 package com.ev.pruebagruposalidas.list.ui
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,8 +12,17 @@ import kotlinx.coroutines.launch
 class ListViewModel: ViewModel() {
     private var repository = PokemonRepository()
 
-    private val _list = MutableLiveData<List<PokemonItemList>>(listOf())
-    val list: LiveData<List<PokemonItemList>> = _list
+    private val _list = mutableStateListOf<PokemonItemList>()
+    val list: List<PokemonItemList> = _list
+
+    private var currentPage = 0
+    private var pageSize = 20
+
+    private val _isLoading = MutableLiveData(true)
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _hasMore = MutableLiveData(true)
+    val hasMore: LiveData<Boolean> = _hasMore
 
     init {
         getPokemonList()
@@ -20,8 +30,16 @@ class ListViewModel: ViewModel() {
 
     fun getPokemonList() {
         viewModelScope.launch {
-            val response = repository.getPokemonList()
-            _list.postValue(response)
+            _isLoading.value = true
+            val response = repository.getPokemonList(currentPage * 10)
+            if (response.isEmpty()) {
+                _hasMore.value = true
+            } else {
+                _list.addAll(response)
+                currentPage++
+            }
+            _isLoading.value = false
+
         }
     }
 

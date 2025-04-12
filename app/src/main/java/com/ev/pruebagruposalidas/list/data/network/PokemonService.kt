@@ -7,7 +7,7 @@ import com.ev.pruebagruposalidas.list.data.response.PokemonListResponse
 class PokemonService() {
     private val retrofit = RetrofitClient.getRetrofit()
 
-    suspend fun getPokemonList() : PokemonListResponse {
-        return retrofit.create(PokemonApiClient::class.java).getPokemonList()
+    suspend fun getPokemonList(offset: Int) : PokemonListResponse {
+        return retrofit.create(PokemonApiClient::class.java).getPokemonList(20, offset)
     }
 }

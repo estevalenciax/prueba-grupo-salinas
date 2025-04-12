@@ -1,3 +1,5 @@
 package com.ev.pruebagruposalidas.list.data
 
-data class PokemonItemList(val name: String, val url: String)
+import java.util.UUID
+
+data class PokemonItemList(val id: String = UUID.randomUUID().toString(), val name: String, val url: String)
