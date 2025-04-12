@@ -12,17 +12,19 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 //@Preview(showBackground = true)
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel,
+    navController: NavHostController
+) {
     val name by viewModel.name.observeAsState("")
     val isNameValid by viewModel.isNameValid.observeAsState(true)
     val email by viewModel.email.observeAsState("")
@@ -37,7 +39,7 @@ fun LoginScreen(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
             Name(name = name, isError = !isNameValid) { viewModel.validateName(it) }
             Email(email = email, isError = !isEmailValid) { viewModel.validateEmail(it) }
             Age(age = age, isError = !isAgeValid) { viewModel.validateAge(it) }
-            LoginButton(isLoginButtonEnabled, viewModel)
+            LoginButton(isLoginButtonEnabled, navController)
         }
     }
 
@@ -101,10 +103,10 @@ fun Age(age: String, isError: Boolean, onTextChange: (String) -> Unit) {
 }
 
 @Composable
-fun LoginButton(isEnabled: Boolean, viewModel: LoginViewModel) {
+fun LoginButton(isEnabled: Boolean, navController: NavHostController) {
     Button(
-        onClick = { viewModel.handleOnLoginClick() },
-        enabled = isEnabled,
+        onClick = { navController.navigate("list") },
+        enabled = true,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(text = "Ingresar")

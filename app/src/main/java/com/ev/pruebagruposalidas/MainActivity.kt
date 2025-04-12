@@ -12,6 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.ev.pruebagruposalidas.list.ui.ListScree
 import com.ev.pruebagruposalidas.login.ui.LoginScreen
 import com.ev.pruebagruposalidas.login.ui.LoginViewModel
 import com.ev.pruebagruposalidas.ui.theme.PruebaGrupoSalidasTheme
@@ -26,29 +30,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             PruebaGrupoSalidasTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-                    LoginScreen(Modifier.padding(innerPadding), loginViewModel)
+
+                    val navigationController = rememberNavController()
+                    NavHost(navController = navigationController, startDestination = "login") {
+                        composable(route = "login") {
+                            LoginScreen(
+                                Modifier.padding(innerPadding),
+                                loginViewModel,
+                                navigationController
+                            )
+                        }
+                        composable(route = "list") {
+                            ListScree(
+                                Modifier.padding(innerPadding),
+                                navigationController
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PruebaGrupoSalidasTheme {
-        Greeting("Android")
-    }
-}
