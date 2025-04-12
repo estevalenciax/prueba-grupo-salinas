@@ -1,5 +1,6 @@
 package com.ev.pruebagruposalidas.list.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +39,9 @@ fun ListScree(
         Column(modifier = Modifier.fillMaxSize()) {
             Text(text = "¡Bienvenido $name!", modifier = Modifier.padding(16.dp), fontSize = 24.sp)
             Spacer(modifier = Modifier.padding(8.dp))
-            List(items, isLoading, hasMore, listViewModel)
+            List(items, isLoading, hasMore, listViewModel) { it ->
+                navController.navigate("details/$it")
+            }
         }
     }
 }
@@ -51,7 +54,7 @@ fun LoadingState(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, viewModel: ListViewModel) {
+fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, viewModel: ListViewModel, onItemClick: (String) -> Unit) {
     val listState = rememberLazyListState()
 
     LaunchedEffect(listState.firstVisibleItemIndex) {
@@ -61,8 +64,8 @@ fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, vie
     }
 
     LazyColumn(state = listState) {
-        items(items, key = { it.id }) {
-            ListItem(it)
+        items(items, key = { it.id }) { it ->
+            ListItem(it) { name -> onItemClick(name) }
         }
         if (isLoading) {
             item {
@@ -79,10 +82,10 @@ fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, vie
 }
 
 @Composable
-fun ListItem(model: PokemonItemList) {
+fun ListItem(model: PokemonItemList, onClick: (String) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp)) {
+        .padding(horizontal = 16.dp, vertical = 8.dp).clickable { onClick(model.name) }) {
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 16.dp)) {
