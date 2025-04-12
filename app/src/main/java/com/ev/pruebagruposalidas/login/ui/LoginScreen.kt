@@ -35,11 +35,15 @@ fun LoginScreen(
     val isLoginButtonEnabled by viewModel.isButtonLoginEnabled.observeAsState(false)
 
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = modifier.align(Alignment.Center).padding(horizontal = 32.dp)) {
+        Column(modifier = modifier
+            .align(Alignment.Center)
+            .padding(horizontal = 32.dp)) {
             Name(name = name, isError = !isNameValid) { viewModel.validateName(it) }
             Email(email = email, isError = !isEmailValid) { viewModel.validateEmail(it) }
             Age(age = age, isError = !isAgeValid) { viewModel.validateAge(it) }
-            LoginButton(isLoginButtonEnabled, navController)
+            LoginButton(isLoginButtonEnabled, navController) {
+                navController.navigate("list/$name")
+            }
         }
     }
 
@@ -103,9 +107,9 @@ fun Age(age: String, isError: Boolean, onTextChange: (String) -> Unit) {
 }
 
 @Composable
-fun LoginButton(isEnabled: Boolean, navController: NavHostController) {
+fun LoginButton(isEnabled: Boolean, navController: NavHostController, onClick: () -> Unit) {
     Button(
-        onClick = { navController.navigate("list") },
+        onClick = { onClick() },
         enabled = true,
         modifier = Modifier.fillMaxWidth()
     ) {

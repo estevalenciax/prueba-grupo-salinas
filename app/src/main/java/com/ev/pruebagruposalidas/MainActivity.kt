@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
                     val navigationController = rememberNavController()
-                    NavHost(navController = navigationController, startDestination = "list") {
+                    NavHost(navController = navigationController, startDestination = "login") {
                         composable(route = "login") {
                             val loginViewModel: LoginViewModel by viewModels()
                             LoginScreen(
@@ -37,12 +37,13 @@ class MainActivity : ComponentActivity() {
                                 navigationController
                             )
                         }
-                        composable(route = "list") {
+                        composable(route = "list/{name}") { backStackEntry ->
                             val listViewModel: ListViewModel by viewModels()
                             ListScree(
                                 Modifier.padding(innerPadding),
                                 navigationController,
-                                listViewModel
+                                listViewModel,
+                                backStackEntry.arguments?.getString("name").orEmpty()
                             )
                         }
                     }

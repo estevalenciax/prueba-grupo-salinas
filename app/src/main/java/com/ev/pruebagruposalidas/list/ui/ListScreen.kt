@@ -3,6 +3,7 @@ package com.ev.pruebagruposalidas.list.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,6 +20,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 
@@ -26,7 +28,7 @@ import com.ev.pruebagruposalidas.list.data.PokemonItemList
 fun ListScree(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    listViewModel: ListViewModel
+    listViewModel: ListViewModel, name: String = ""
 ) {
     val items = listViewModel.list
     val isLoading by listViewModel.isLoading.observeAsState(initial = false)
@@ -34,6 +36,8 @@ fun ListScree(
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
+            Text(text = "¡Bienvenido $name!", modifier = Modifier.padding(16.dp), fontSize = 24.sp)
+            Spacer(modifier = Modifier.padding(8.dp))
             List(items, isLoading, hasMore, listViewModel)
         }
     }
