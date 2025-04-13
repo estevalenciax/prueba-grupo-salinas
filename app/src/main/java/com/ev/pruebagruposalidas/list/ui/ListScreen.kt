@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ev.pruebagruposalidas.R
+import com.ev.pruebagruposalidas.core.routes.Routes
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 
 @Composable
@@ -67,7 +68,7 @@ fun ListScree(
             SearchBar(search) { listViewModel.onSeachChange(it) }
             Spacer(modifier = Modifier.padding(8.dp))
             List(items, isLoading, hasMore, listViewModel) { it ->
-                navController.navigate("details/$it")
+                navController.navigate(Routes.PokemonDetails.navigateWithName(it))
             }
         }
     }

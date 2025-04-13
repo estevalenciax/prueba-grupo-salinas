@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.ev.pruebagruposalidas.core.routes.Routes
 import com.ev.pruebagruposalidas.details.ui.PokemonDetailsScreen
 import com.ev.pruebagruposalidas.details.ui.PokemonViewModel
 import com.ev.pruebagruposalidas.list.ui.ListScree
@@ -31,8 +32,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
                     val navigationController = rememberNavController()
-                    NavHost(navController = navigationController, startDestination = "list/Esteb") {
-                        composable(route = "login") {
+                    NavHost(navController = navigationController, startDestination = Routes.Login.route) {
+                        composable(route = Routes.Login.route) {
                             val loginViewModel: LoginViewModel by viewModels()
                             LoginScreen(
                                 Modifier.padding(innerPadding),
@@ -40,17 +41,17 @@ class MainActivity : ComponentActivity() {
                                 navigationController
                             )
                         }
-                        composable(route = "list/{name}") { backStackEntry ->
+                        composable(route = Routes.PokemonList.route) { backStackEntry ->
                             val listViewModel: ListViewModel by viewModels()
                             ListScree(
                                 Modifier.padding(innerPadding),
                                 navigationController,
                                 listViewModel,
-                                backStackEntry.arguments?.getString("name").orEmpty()
+                                backStackEntry.arguments?.getString(Routes.PokemonList.paramName()).orEmpty()
                             )
                         }
 
-                        composable(route = "details/{namePokemon}") { backStackEntry ->
+                        composable(route = Routes.PokemonDetails.route) { backStackEntry ->
                             val detailsViewModel: PokemonViewModel = viewModel()
                             PokemonDetailsScreen(modifier =  Modifier.padding(innerPadding), detailsViewModel)
                         }

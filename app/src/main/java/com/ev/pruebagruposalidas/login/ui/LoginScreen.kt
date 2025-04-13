@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.ev.pruebagruposalidas.core.routes.Routes
 
 //@Preview(showBackground = true)
 @Composable
@@ -42,7 +43,7 @@ fun LoginScreen(
             Email(email = email, isError = !isEmailValid) { viewModel.validateEmail(it) }
             Age(age = age, isError = !isAgeValid) { viewModel.validateAge(it) }
             LoginButton(isLoginButtonEnabled, navController) {
-                navController.navigate("list/$name")
+                navController.navigate(Routes.PokemonList.navigateWithName(name))
             }
         }
     }
