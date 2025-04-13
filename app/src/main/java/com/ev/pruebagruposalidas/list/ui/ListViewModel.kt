@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 import com.ev.pruebagruposalidas.list.domain.GetPokemonListByPaginationUseCase
 import com.ev.pruebagruposalidas.list.domain.SearchPokemonUseCase
@@ -29,24 +30,31 @@ class ListViewModel: ViewModel() {
     private val _search = MutableLiveData("")
     val search: LiveData<String> = _search
 
+    private val _uiState = MutableLiveData<UiState<List<PokemonItemList>>>()
+    val uiState : LiveData<UiState<List<PokemonItemList>>> = _uiState
+
     init {
         getPokemonList()
     }
 
     fun getPokemonList() {
         viewModelScope.launch {
-            _isLoading.value = true
-            delay(1000) //delay para que se pueda apreciar el estado de carga
-            val response = getPokemonListByPaginationUseCase.getData(currentPage)
-            if (response.isEmpty()) {
-                _hasMore.value = false
-            } else {
-                _list.addAll(response)
-                currentPage++
-                _hasMore.value = true
-            }
-            _isLoading.value = false
+            _uiState.value = UiState.Loading
+            try {
+                delay(1000)
+                val response = getPokemonListByPaginationUseCase.getData(currentPage)
+                if (response.isEmpty()) {
+                    _hasMore.value = false
+                } else {
+                    _list.addAll(response)
+                    currentPage++
+                    _hasMore.value = true
+                }
+                _uiState.value = UiState.Success(_list)
 
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error al cargar datos: ${e.message}")
+            }
         }
     }
 
@@ -57,18 +65,21 @@ class ListViewModel: ViewModel() {
             return
         }
         viewModelScope.launch {
-            _isLoading.value = true
-            val response = searchPokemonUseCase.searchPokemon(search)
-            if (response.isEmpty()) {
-                _hasMore.value = false
-            } else {
-                _list.clear()
-                _list.addAll(response)
-                currentPage++
+            _uiState.value = UiState.Loading
+            try {
+                val response = searchPokemonUseCase.searchPokemon(search)
+                if (response.isEmpty()) {
+                    _hasMore.value = false
+                } else {
+                    _list.clear()
+                    _list.addAll(response)
+                    currentPage++
+                }
+                _uiState.value = UiState.Success(_list)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error al cargar la información: ${e.message}")
             }
-            _isLoading.value = false
         }
-
     }
 
     private fun onSeachEmpty() {
