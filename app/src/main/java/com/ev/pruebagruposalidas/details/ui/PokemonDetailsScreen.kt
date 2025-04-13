@@ -18,32 +18,48 @@ import androidx.compose.material3.ChipColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ev.pruebagruposalidas.R
+import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.details.data.Pokemon
 
 @Composable
 fun PokemonDetailsScreen(modifier: Modifier = Modifier, viewModel: PokemonViewModel) {
-    val pokemon by viewModel.pokemon.observeAsState()
-    val isLoading by viewModel.isLoading.observeAsState()
+    val uiState by viewModel.uiState.observeAsState(UiState.Loading)
     Box(modifier = modifier.fillMaxSize()) {
         Column {
-            pokemon?.let {
-                Content(it)
-            }
-            if (isLoading == true) {
-                LoadingState()
+            when (uiState) {
+                is UiState.Loading -> LoadingState()
+                is UiState.Success -> {
+                    val pokemon = (uiState as UiState.Success<Pokemon>).data
+                    Content(pokemon = pokemon)
+                }
+                is UiState.Error -> {
+                    val message = (uiState as UiState.Error).message
+                    Toast(message = message)
+                }
             }
         }
+    }
+}
+
+@Composable
+fun Toast(message: String) {
+    val context = LocalContext.current
+
+    LaunchedEffect(message) {
+        android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -56,7 +72,6 @@ fun LoadingState(modifier: Modifier = Modifier) {
 
 @Composable
 private fun Content(pokemon: Pokemon) {
-    val weakness = listOf("Water")
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(top = 56.dp), contentAlignment = Alignment.TopCenter) {
