@@ -8,6 +8,6 @@ class PokemonDetailsRepository {
 
     suspend fun getPokemonDetails(id: String): Pokemon {
         val response: PokemonResponse = api.getPokemonDetails(id)
-        return Pokemon(id = response.id, name = response.name, weight = response.weight, height = response.height)
+        return Pokemon(id = response.id, name = response.name, weight = response.weight, height = response.height, types = response.types.map { it.type.name })
     }
 }

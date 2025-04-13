@@ -49,6 +49,7 @@ fun ListScree(
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
+            Spacer(modifier = Modifier.padding(top = 32.dp))
             Text(text = "¡Bienvenido $name!", modifier = Modifier.padding(16.dp), fontSize = 24.sp)
             Spacer(modifier = Modifier.padding(8.dp))
             List(items, isLoading, hasMore, listViewModel) { it ->
@@ -96,8 +97,9 @@ fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, vie
 @Composable
 fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
     Card(modifier = Modifier
+        .fillMaxWidth()
         .padding(16.dp)
-        .width(180.dp)
+//        .width(180.dp)
         .clickable { onClick(model.name) },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
