@@ -68,13 +68,10 @@ class ListViewModel: ViewModel() {
             _uiState.value = UiState.Loading
             try {
                 val response = searchPokemonUseCase.searchPokemon(search)
-                if (response.isEmpty()) {
-                    _hasMore.value = false
-                } else {
-                    _list.clear()
-                    _list.addAll(response)
-                    currentPage++
-                }
+                _list.clear()
+                _list.addAll(response)
+                currentPage++
+                _hasMore.value = false
                 _uiState.value = UiState.Success(_list)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error al cargar la información: ${e.message}")
