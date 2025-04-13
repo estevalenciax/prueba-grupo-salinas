@@ -36,7 +36,7 @@ class ListViewModel: ViewModel() {
     fun getPokemonList() {
         viewModelScope.launch {
             _isLoading.value = true
-            delay(3000)
+            delay(1000) //delay para que se pueda apreciar el estado de carga
             val response = getPokemonListByPaginationUseCase.getData(currentPage)
             if (response.isEmpty()) {
                 _hasMore.value = false

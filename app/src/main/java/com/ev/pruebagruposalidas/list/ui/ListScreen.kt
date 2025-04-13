@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ev.pruebagruposalidas.R
-import com.ev.pruebagruposalidas.core.routes.Routes
+import com.ev.pruebagruposalidas.data.routes.Routes
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 
 @Composable

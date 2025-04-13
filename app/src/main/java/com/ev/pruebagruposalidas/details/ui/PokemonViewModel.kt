@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ev.pruebagruposalidas.core.routes.Routes
+import com.ev.pruebagruposalidas.data.routes.Routes
 import com.ev.pruebagruposalidas.details.data.Pokemon
 import com.ev.pruebagruposalidas.details.data.network.PokemonDetailsRepository
 import kotlinx.coroutines.launch

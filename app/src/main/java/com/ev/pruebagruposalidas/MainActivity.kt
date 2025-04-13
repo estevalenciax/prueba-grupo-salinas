@@ -13,7 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.ev.pruebagruposalidas.core.routes.Routes
+import com.ev.pruebagruposalidas.data.routes.Routes
 import com.ev.pruebagruposalidas.details.ui.PokemonDetailsScreen
 import com.ev.pruebagruposalidas.details.ui.PokemonViewModel
 import com.ev.pruebagruposalidas.list.ui.ListScree

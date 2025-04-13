@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.ev.pruebagruposalidas.core.routes.Routes
+import com.ev.pruebagruposalidas.data.routes.Routes
 
 //@Preview(showBackground = true)
 @Composable

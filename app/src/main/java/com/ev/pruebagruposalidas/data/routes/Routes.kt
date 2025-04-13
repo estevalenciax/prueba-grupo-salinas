@@ -1,4 +1,4 @@
-package com.ev.pruebagruposalidas.core.routes
+package com.ev.pruebagruposalidas.data.routes
 
 sealed class Routes(val route: String) {
     object Login: Routes("login")
