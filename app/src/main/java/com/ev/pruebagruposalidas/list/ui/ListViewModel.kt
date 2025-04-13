@@ -6,13 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
-import com.ev.pruebagruposalidas.list.data.network.PokemonRepository
+import com.ev.pruebagruposalidas.list.domain.GetPokemonListByPaginationUseCase
 import com.ev.pruebagruposalidas.list.domain.SearchPokemonUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ListViewModel: ViewModel() {
-    private var repository = PokemonRepository()
+    private val getPokemonListByPaginationUseCase = GetPokemonListByPaginationUseCase()
     private val searchPokemonUseCase = SearchPokemonUseCase()
 
     private val _list = mutableStateListOf<PokemonItemList>()
@@ -37,7 +37,7 @@ class ListViewModel: ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             delay(3000)
-            val response = repository.getPokemonList(currentPage * 20)
+            val response = getPokemonListByPaginationUseCase.getData(currentPage)
             if (response.isEmpty()) {
                 _hasMore.value = false
             } else {

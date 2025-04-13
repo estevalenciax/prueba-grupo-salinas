@@ -1,11 +1,12 @@
 package com.ev.pruebagruposalidas.list.domain
 
+import com.ev.pruebagruposalidas.list.data.PokemonItemList
 import com.ev.pruebagruposalidas.list.data.network.PokemonRepository
 
 class GetPokemonListByPaginationUseCase {
     private val repository = PokemonRepository()
 
-    fun getData() {
-
+    suspend fun getData(currentPage: Int) : List<PokemonItemList> {
+        return repository.getPokemonList(currentPage * 20)
     }
 }
