@@ -14,6 +14,6 @@ interface PokemonApiClient {
     @GET("pokemon/{id}")
     suspend fun getPokemonDetails(@Path("id") idPokemon: String): PokemonResponse
 
-    @GET("pokemon/bulbasaur")
-    suspend fun getPokemonDetailsMock(): PokemonResponse
+    @GET("pokemon?limit=1302")
+    suspend fun getAllPokemons(): PokemonListResponse
 }

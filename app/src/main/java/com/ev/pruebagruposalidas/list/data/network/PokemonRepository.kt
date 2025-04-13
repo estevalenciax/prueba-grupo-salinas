@@ -6,8 +6,8 @@ import com.ev.pruebagruposalidas.list.data.response.PokemonListResponse
 class PokemonRepository {
     private val api = PokemonService()
 
-    suspend fun getPokemonList(offset: Int): List<PokemonItemList> {
-        val response: PokemonListResponse = api.getPokemonList(offset)
+    suspend fun getPokemonList(offset: Int, limit: Int = 20): List<PokemonItemList> {
+        val response: PokemonListResponse = api.getPokemonList(offset, limit)
         return response.results.map { PokemonItemList(name = it.name, url = it.url) }
     }
 }

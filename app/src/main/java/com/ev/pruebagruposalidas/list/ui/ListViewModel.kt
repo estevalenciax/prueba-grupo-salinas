@@ -7,23 +7,27 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 import com.ev.pruebagruposalidas.list.data.network.PokemonRepository
+import com.ev.pruebagruposalidas.list.domain.SearchPokemonUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ListViewModel: ViewModel() {
     private var repository = PokemonRepository()
+    private val searchPokemonUseCase = SearchPokemonUseCase()
 
     private val _list = mutableStateListOf<PokemonItemList>()
     val list: List<PokemonItemList> = _list
 
     private var currentPage = 0
-    private var pageSize = 20
 
     private val _isLoading = MutableLiveData(true)
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val _hasMore = MutableLiveData(true)
     val hasMore: LiveData<Boolean> = _hasMore
+
+    private val _search = MutableLiveData("")
+    val search: LiveData<String> = _search
 
     init {
         getPokemonList()
@@ -33,16 +37,45 @@ class ListViewModel: ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             delay(3000)
-            val response = repository.getPokemonList(currentPage * 10)
+            val response = repository.getPokemonList(currentPage * 20)
             if (response.isEmpty()) {
-                _hasMore.value = true
+                _hasMore.value = false
             } else {
                 _list.addAll(response)
                 currentPage++
+                _hasMore.value = true
             }
             _isLoading.value = false
 
         }
+    }
+
+    fun onSeachChange(search: String) {
+        _search.value = search
+        if (search.isBlank()) {
+            onSeachEmpty()
+            return
+        }
+        viewModelScope.launch {
+            _isLoading.value = true
+            val response = searchPokemonUseCase.searchPokemon(search)
+            if (response.isEmpty()) {
+                _hasMore.value = false
+            } else {
+                _list.clear()
+                _list.addAll(response)
+                currentPage++
+            }
+            _isLoading.value = false
+        }
+
+    }
+
+    private fun onSeachEmpty() {
+        currentPage = 0
+        _hasMore.value = true
+        _list.clear()
+        getPokemonList()
     }
 
 }

@@ -18,19 +18,30 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -46,17 +57,36 @@ fun ListScree(
     val items = listViewModel.list
     val isLoading by listViewModel.isLoading.observeAsState(initial = false)
     val hasMore by listViewModel.hasMore.observeAsState(initial = false)
+    val search by listViewModel.search.observeAsState(initial = "")
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.padding(top = 32.dp))
             Text(text = "¡Bienvenido $name!", modifier = Modifier.padding(16.dp), fontSize = 24.sp)
             Spacer(modifier = Modifier.padding(8.dp))
+            SearchBar(search) { listViewModel.onSeachChange(it) }
+            Spacer(modifier = Modifier.padding(8.dp))
             List(items, isLoading, hasMore, listViewModel) { it ->
                 navController.navigate("details/$it")
             }
         }
     }
+}
+
+@Composable
+fun SearchBar(search: String, onSearch: (String) -> Unit) {
+    TextField(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        value = search,
+        onValueChange = { onSearch(it) }, placeholder = { Text(text = "Search") },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "search") },
+        singleLine = true, shape = RoundedCornerShape(16.dp),
+        colors = TextFieldDefaults.colors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+
+    )
 }
 
 @Composable
@@ -98,7 +128,7 @@ fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, vie
 fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)
+        .padding(4.dp)
 //        .width(180.dp)
         .clickable { onClick(model.name) },
         shape = RoundedCornerShape(16.dp),
@@ -113,12 +143,12 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-                Text(
-                    text = "#${index+1}",
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 10.sp
-                )
+//                Text(
+//                    text = "#${index+1}",
+//                    color = Color.Black,
+//                    fontWeight = FontWeight.SemiBold,
+//                    fontSize = 10.sp
+//                )
             }
             Spacer(modifier = Modifier.padding(4.dp))
 
