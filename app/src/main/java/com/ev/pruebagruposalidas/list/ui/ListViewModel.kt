@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 import com.ev.pruebagruposalidas.list.data.network.PokemonRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ListViewModel: ViewModel() {
@@ -31,6 +32,7 @@ class ListViewModel: ViewModel() {
     fun getPokemonList() {
         viewModelScope.launch {
             _isLoading.value = true
+            delay(3000)
             val response = repository.getPokemonList(currentPage * 10)
             if (response.isEmpty()) {
                 _hasMore.value = true

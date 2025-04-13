@@ -1,6 +1,9 @@
 package com.ev.pruebagruposalidas.list.ui
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,10 +11,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,9 +28,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.ev.pruebagruposalidas.R
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 
 @Composable
@@ -55,17 +67,17 @@ fun LoadingState(modifier: Modifier = Modifier) {
 
 @Composable
 fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, viewModel: ListViewModel, onItemClick: (String) -> Unit) {
-    val listState = rememberLazyListState()
+    val gridlistState = rememberLazyGridState()
 
-    LaunchedEffect(listState.firstVisibleItemIndex) {
-        if (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == items.size-1 && !isLoading && hasMore) {
+    LaunchedEffect(gridlistState.firstVisibleItemIndex) {
+        if (gridlistState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == items.size-1 && !isLoading && hasMore) {
             viewModel.getPokemonList()
         }
     }
 
-    LazyColumn(state = listState) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2), state = gridlistState) {
         items(items, key = { it.id }) { it ->
-            ListItem(it) { name -> onItemClick(name) }
+            ListItem(it, items.indexOf(it).toString()) { name -> onItemClick(name) }
         }
         if (isLoading) {
             item {
@@ -82,14 +94,59 @@ fun List(items: List<PokemonItemList>, isLoading: Boolean, hasMore: Boolean, vie
 }
 
 @Composable
-fun ListItem(model: PokemonItemList, onClick: (String) -> Unit) {
+fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
     Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp).clickable { onClick(model.name) }) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 16.dp)) {
-            Text(text = model.name)
+        .padding(16.dp)
+        .width(180.dp)
+        .clickable { onClick(model.name) },
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = model.name,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "#${index+1}",
+                    color = Color.Black,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 10.sp
+                )
+            }
+            Spacer(modifier = Modifier.padding(4.dp))
+
+            Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    TypeChip(type = "Type", color = Color(0xFF63D471))
+                }
+                Image(
+                    painter = painterResource(id = R.drawable.pokeball),
+                    contentDescription = "pokemon",
+                    modifier = Modifier.size(80.dp)
+                )
+            }
+
         }
+    }
+}
+
+@Composable
+fun TypeChip(type: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .background(Color.LightGray, RoundedCornerShape(50))
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            text = type,
+            color = Color.Black,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 8.sp
+        )
     }
 }
