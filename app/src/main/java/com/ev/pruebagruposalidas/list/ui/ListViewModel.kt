@@ -58,6 +58,29 @@ class ListViewModel: ViewModel() {
         }
     }
 
+    fun onRefreshClick() {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            currentPage = 0
+            try {
+                delay(1000)
+                val response = getPokemonListByPaginationUseCase.getData(currentPage)
+                if (response.isEmpty()) {
+                    _hasMore.value = false
+                } else {
+                    _list.clear()
+                    _list.addAll(response)
+                    currentPage++
+                    _hasMore.value = true
+                }
+                _uiState.value = UiState.Success(_list)
+
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error al cargar datos: ${e.message}")
+            }
+        }
+    }
+
     fun onSeachChange(search: String) {
         _search.value = search
         if (search.isBlank()) {

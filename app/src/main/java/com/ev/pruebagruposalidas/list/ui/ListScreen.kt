@@ -20,10 +20,12 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -80,9 +82,25 @@ fun ListScree(
                 navController.navigate(Routes.PokemonDetails.navigateWithName(it))
             }
 
+
         }
+        if (search.isBlank()) {
+            MyFab { listViewModel.onRefreshClick() }
+        }
+
     }
 }
+
+@Composable
+fun MyFab(onClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        FloatingActionButton(onClick = { onClick() }, modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 32.dp, end = 32.dp)) {
+            Icon(Icons.Filled.Refresh, contentDescription = "")
+        }
+    }
+
+}
+
 @Composable
 fun Toast(message: String) {
     val context = LocalContext.current
