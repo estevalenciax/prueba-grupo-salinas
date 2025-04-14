@@ -9,10 +9,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.ev.pruebagruposalidas.data.routes.Routes
 import com.ev.pruebagruposalidas.details.ui.PokemonDetailsScreen
 import com.ev.pruebagruposalidas.details.ui.PokemonViewModel
@@ -21,7 +24,9 @@ import com.ev.pruebagruposalidas.list.ui.ListViewModel
 import com.ev.pruebagruposalidas.login.ui.LoginScreen
 import com.ev.pruebagruposalidas.login.ui.LoginViewModel
 import com.ev.pruebagruposalidas.ui.theme.PruebaGrupoSalidasTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +56,10 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        composable(route = Routes.PokemonDetails.route) { backStackEntry ->
-                            val detailsViewModel: PokemonViewModel = viewModel()
+                        composable(route = Routes.PokemonDetails.route,
+                            arguments = listOf(navArgument(Routes.PokemonDetails.paramNamePokemon()) { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            val detailsViewModel: PokemonViewModel = hiltViewModel(backStackEntry)
                             PokemonDetailsScreen(modifier =  Modifier.padding(innerPadding), detailsViewModel)
                         }
                     }

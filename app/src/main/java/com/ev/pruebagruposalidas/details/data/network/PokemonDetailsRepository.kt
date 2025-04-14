@@ -2,9 +2,11 @@ package com.ev.pruebagruposalidas.details.data.network
 
 import com.ev.pruebagruposalidas.details.data.Pokemon
 import com.ev.pruebagruposalidas.details.data.response.PokemonResponse
+import javax.inject.Inject
 
-class PokemonDetailsRepository {
-    private val api = PokemonDetailsService()
+class PokemonDetailsRepository @Inject constructor(
+    private val api : PokemonDetailsService
+) {
 
     suspend fun getPokemonDetails(id: String): Pokemon {
         val response: PokemonResponse = api.getPokemonDetails(id)

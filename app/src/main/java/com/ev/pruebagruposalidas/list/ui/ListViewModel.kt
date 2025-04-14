@@ -9,12 +9,18 @@ import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 import com.ev.pruebagruposalidas.list.domain.GetPokemonListByPaginationUseCase
 import com.ev.pruebagruposalidas.list.domain.SearchPokemonUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListViewModel: ViewModel() {
-    private val getPokemonListByPaginationUseCase = GetPokemonListByPaginationUseCase()
-    private val searchPokemonUseCase = SearchPokemonUseCase()
+@HiltViewModel
+class ListViewModel @Inject constructor(
+    private val getPokemonListByPaginationUseCase : GetPokemonListByPaginationUseCase,
+    private val searchPokemonUseCase : SearchPokemonUseCase
+): ViewModel() {
+//    private val getPokemonListByPaginationUseCase = GetPokemonListByPaginationUseCase()
+//    private val searchPokemonUseCase = SearchPokemonUseCase()
 
     private val _list = mutableStateListOf<PokemonItemList>()
     val list: List<PokemonItemList> = _list

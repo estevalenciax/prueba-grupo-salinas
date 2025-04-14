@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ev.pruebagruposalidas.utils.FormValidator
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel: ViewModel() {
-
-    private val formValidator = FormValidator()
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val formValidator : FormValidator): ViewModel() {
 
     private val _name = MutableLiveData<String>("")
     val name : LiveData<String> = _name

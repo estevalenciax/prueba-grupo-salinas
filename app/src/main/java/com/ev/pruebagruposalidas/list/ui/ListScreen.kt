@@ -79,7 +79,7 @@ fun ListScree(
             SearchBar(search) { listViewModel.onSeachChange(it) }
             Spacer(modifier = Modifier.padding(8.dp))
             List(items, (uiState is UiState.Loading), hasMore, listViewModel) { it ->
-                navController.navigate(Routes.PokemonDetails.navigateWithName(it))
+                navController.navigate("details/$it")
             }
 
 

@@ -3,12 +3,13 @@ package com.ev.pruebagruposalidas.details.data.network
 import com.ev.pruebagruposalidas.core.network.retrofit.PokemonApiClient
 import com.ev.pruebagruposalidas.core.network.retrofit.RetrofitClient
 import com.ev.pruebagruposalidas.details.data.response.PokemonResponse
+import javax.inject.Inject
 
-class PokemonDetailsService() {
-    private val retrofit = RetrofitClient.getRetrofit()
+class PokemonDetailsService @Inject constructor(
+    private val pokemonApiClient: PokemonApiClient
+) {
 
     suspend fun getPokemonDetails(id: String) : PokemonResponse {
-        return retrofit.create(PokemonApiClient::class.java).getPokemonDetails(id)
-//        return retrofit.create(PokemonApiClient::class.java).getPokemonDetailsMock()
+        return pokemonApiClient.getPokemonDetails(id)
     }
 }

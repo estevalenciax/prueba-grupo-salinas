@@ -9,12 +9,16 @@ import com.ev.pruebagruposalidas.data.routes.Routes
 import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.details.data.Pokemon
 import com.ev.pruebagruposalidas.details.data.network.PokemonDetailsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PokemonViewModel(private val savedStateHandle: SavedStateHandle): ViewModel() {
+@HiltViewModel
+class PokemonViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
+    private val repository : PokemonDetailsRepository
+): ViewModel() {
     private val namePokemon: String = savedStateHandle[Routes.PokemonDetails.paramNamePokemon()] ?: ""
-
-    private val repository = PokemonDetailsRepository()
 
     private val _uiState = MutableLiveData<UiState<Pokemon>>(null)
     val uiState : LiveData<UiState<Pokemon>> = _uiState
