@@ -116,8 +116,8 @@ fun SearchBar(search: String, onSearch: (String) -> Unit) {
         .fillMaxWidth()
         .padding(horizontal = 16.dp),
         value = search,
-        onValueChange = { onSearch(it) }, placeholder = { Text(text = "Search") },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "search") },
+        onValueChange = { onSearch(it) }, placeholder = { Text(text = "Buscar...") },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "buscar") },
         singleLine = true, shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
@@ -168,7 +168,6 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp)
-//        .width(180.dp)
         .clickable { onClick(model.name) },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
@@ -182,12 +181,6 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-//                Text(
-//                    text = "#${index+1}",
-//                    color = Color.Black,
-//                    fontWeight = FontWeight.SemiBold,
-//                    fontSize = 10.sp
-//                )
             }
             Spacer(modifier = Modifier.padding(4.dp))
 
@@ -201,7 +194,6 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
                     modifier = Modifier.size(80.dp)
                 )
             }
-
         }
     }
 }
