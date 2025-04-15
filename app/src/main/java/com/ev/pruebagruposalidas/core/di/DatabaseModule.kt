@@ -21,6 +21,6 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun providePokemonDatabase(@ApplicationContext appContext: Context): PokemonDatabase {
-        return Room.inMemoryDatabaseBuilder(appContext, PokemonDatabase::class.java).build()
+        return Room.databaseBuilder(appContext, PokemonDatabase::class.java, "pokemon_database").build()
     }
 }
