@@ -9,6 +9,8 @@ class GetPokemonListByPaginationUseCase @Inject constructor(
 ) {
 
     suspend fun getData(currentPage: Int) : List<PokemonItemList> {
-        return repository.getPokemonList(currentPage * 20)
+        val response = repository.getPokemonList(currentPage * 20)
+        repository.savePokemonList(response)
+        return response
     }
 }

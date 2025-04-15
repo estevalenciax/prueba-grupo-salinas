@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
+import com.ev.pruebagruposalidas.list.domain.GetPokemonListByDatabaseUseCase
 import com.ev.pruebagruposalidas.list.domain.GetPokemonListByPaginationUseCase
 import com.ev.pruebagruposalidas.list.domain.SearchPokemonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ListViewModel @Inject constructor(
     private val getPokemonListByPaginationUseCase : GetPokemonListByPaginationUseCase,
-    private val searchPokemonUseCase : SearchPokemonUseCase
+    private val searchPokemonUseCase : SearchPokemonUseCase,
+    private val getPokemonListByDatabaseUseCase: GetPokemonListByDatabaseUseCase
 ): ViewModel() {
 //    private val getPokemonListByPaginationUseCase = GetPokemonListByPaginationUseCase()
 //    private val searchPokemonUseCase = SearchPokemonUseCase()
@@ -59,7 +61,26 @@ class ListViewModel @Inject constructor(
                 _uiState.value = UiState.Success(_list)
 
             } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error al cargar datos: ${e.message}")
+                _uiState.value = UiState.Error("Error al cargar datos online: ${e.message}")
+                getDataOffline()
+            }
+        }
+    }
+
+    private fun getDataOffline() {
+        viewModelScope.launch {
+            try {
+                val response = getPokemonListByDatabaseUseCase.getData()
+                if (response.isEmpty()) {
+                    _hasMore.value = false
+                } else {
+                    _list.clear()
+                    _list.addAll(response)
+                    _hasMore.value = true
+                }
+                _uiState.value = UiState.Success(_list)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error al cargar datos del almacenamiento interno: ${e.message}")
             }
         }
     }
