@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -27,8 +26,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -36,21 +33,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.ev.pruebagruposalidas.R
-import com.ev.pruebagruposalidas.data.routes.Routes
 import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 
@@ -116,8 +108,8 @@ fun SearchBar(search: String, onSearch: (String) -> Unit) {
         .fillMaxWidth()
         .padding(horizontal = 16.dp),
         value = search,
-        onValueChange = { onSearch(it) }, placeholder = { Text(text = "Search") },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "search") },
+        onValueChange = { onSearch(it) }, placeholder = { Text(text = "Buscar...") },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "buscar") },
         singleLine = true, shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
@@ -168,7 +160,6 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
     Card(modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp)
-//        .width(180.dp)
         .clickable { onClick(model.name) },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
@@ -182,12 +173,6 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
-//                Text(
-//                    text = "#${index+1}",
-//                    color = Color.Black,
-//                    fontWeight = FontWeight.SemiBold,
-//                    fontSize = 10.sp
-//                )
             }
             Spacer(modifier = Modifier.padding(4.dp))
 
@@ -201,7 +186,6 @@ fun ListItem(model: PokemonItemList, index: String, onClick: (String) -> Unit) {
                     modifier = Modifier.size(80.dp)
                 )
             }
-
         }
     }
 }
