@@ -4,8 +4,6 @@ import com.ev.pruebagruposalidas.data.PokemonDao
 import com.ev.pruebagruposalidas.details.data.Pokemon
 import com.ev.pruebagruposalidas.details.data.response.PokemonResponse
 import com.ev.pruebagruposalidas.details.data.toEntity
-import com.ev.pruebagruposalidas.list.data.entity.Converters
-import com.ev.pruebagruposalidas.list.data.entity.PokemonEntity
 import com.ev.pruebagruposalidas.list.data.entity.toModel
 import javax.inject.Inject
 

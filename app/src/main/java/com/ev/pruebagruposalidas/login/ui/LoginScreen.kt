@@ -42,7 +42,7 @@ fun LoginScreen(
             Name(name = name, isError = !isNameValid) { viewModel.validateName(it) }
             Email(email = email, isError = !isEmailValid) { viewModel.validateEmail(it) }
             Age(age = age, isError = !isAgeValid) { viewModel.validateAge(it) }
-            LoginButton(isLoginButtonEnabled, navController) {
+            LoginButton(isLoginButtonEnabled) {
                 navController.navigate(Routes.PokemonList.navigateWithName(name))
             }
         }
@@ -108,10 +108,10 @@ fun Age(age: String, isError: Boolean, onTextChange: (String) -> Unit) {
 }
 
 @Composable
-fun LoginButton(isEnabled: Boolean, navController: NavHostController, onClick: () -> Unit) {
+fun LoginButton(isEnabled: Boolean, onClick: () -> Unit) {
     Button(
         onClick = { onClick() },
-        enabled = true,
+        enabled = isEnabled,
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(text = "Ingresar")
