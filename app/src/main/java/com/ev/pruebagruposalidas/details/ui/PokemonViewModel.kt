@@ -28,11 +28,23 @@ class PokemonViewModel @Inject constructor(
             _uiState.value = UiState.Loading
             try {
                 val response = repository.getPokemonDetails(namePokemon)
+                repository.savePokemonDetails(response)
+                _uiState.value = UiState.Success(response)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error al cargar la información: ${e.message}")
+                getPokemonOffline()
+            }
+        }
+    }
+
+    private fun getPokemonOffline() {
+        viewModelScope.launch {
+            try {
+                val response = repository.getPokemonDetailsFromDatabase(namePokemon)
                 _uiState.value = UiState.Success(response)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error("Error al cargar la información: ${e.message}")
             }
-
         }
     }
 
