@@ -9,6 +9,7 @@ import com.ev.pruebagruposalidas.data.state.UiState
 import com.ev.pruebagruposalidas.list.data.PokemonItemList
 import com.ev.pruebagruposalidas.list.domain.GetPokemonListByDatabaseUseCase
 import com.ev.pruebagruposalidas.list.domain.GetPokemonListByPaginationUseCase
+import com.ev.pruebagruposalidas.list.domain.SearchPokemonByDatabaseUseCase
 import com.ev.pruebagruposalidas.list.domain.SearchPokemonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -19,10 +20,9 @@ import javax.inject.Inject
 class ListViewModel @Inject constructor(
     private val getPokemonListByPaginationUseCase : GetPokemonListByPaginationUseCase,
     private val searchPokemonUseCase : SearchPokemonUseCase,
-    private val getPokemonListByDatabaseUseCase: GetPokemonListByDatabaseUseCase
+    private val getPokemonListByDatabaseUseCase: GetPokemonListByDatabaseUseCase,
+    private val searchPokemonByDatabaseUseCase: SearchPokemonByDatabaseUseCase
 ): ViewModel() {
-//    private val getPokemonListByPaginationUseCase = GetPokemonListByPaginationUseCase()
-//    private val searchPokemonUseCase = SearchPokemonUseCase()
 
     private val _list = mutableStateListOf<PokemonItemList>()
     val list: List<PokemonItemList> = _list
@@ -124,7 +124,8 @@ class ListViewModel @Inject constructor(
                 _hasMore.value = false
                 _uiState.value = UiState.Success(_list)
             } catch (e: Exception) {
-                _uiState.value = UiState.Error("Error al cargar la información: ${e.message}")
+                _uiState.value = UiState.Error("Buscando en resultados locales...")
+                searchPokemonByDatabase(search)
             }
         }
     }
@@ -134,6 +135,26 @@ class ListViewModel @Inject constructor(
         _hasMore.value = true
         _list.clear()
         getPokemonList()
+    }
+
+    private fun searchPokemonByDatabase(search: String) {
+        _search.value = search
+        if (search.isBlank()) {
+            onSeachEmpty()
+            return
+        }
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            try {
+                val response = searchPokemonByDatabaseUseCase.searchPokemon(search)
+                _list.clear()
+                _list.addAll(response)
+                _hasMore.value = false
+                _uiState.value = UiState.Success(_list)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error("Error al cargar la información: ${e.message}")
+            }
+        }
     }
 
 }

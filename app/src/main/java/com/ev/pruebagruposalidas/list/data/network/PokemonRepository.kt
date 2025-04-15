@@ -26,4 +26,9 @@ class PokemonRepository @Inject constructor(
         val pokemonEntities = pokemonList.map { PokemonEntity(name = it.name, url = it.url) }
         database.insertPokemonList(pokemonEntities)
     }
+
+    suspend fun searchPokemonByNameFromDatabase(name: String): List<PokemonItemList> {
+        val response = database.searchPokemonByName(name)
+        return response.map { PokemonItemList(name = it.name, url = it.url) }
+    }
 }
